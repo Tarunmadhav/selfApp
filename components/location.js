@@ -1,18 +1,9 @@
 import React,{Component}from 'react';
-import {
-    View,
-    Text,
-    TextInput,
-    Modal,
-    KeyboardAvoidingView,
-    StyleSheet,
-    TouchableOpacity,
-    Alert,
-    ScrollView,
-  Image,Linking,Platform,
-  Button} from 'react-native';
+import {View,Text,TextInput,Modal,KeyboardAvoidingView,StyleSheet,TouchableOpacity,
+  Alert,ScrollView,Image,Linking,Platform,Button} from 'react-native';
 import db from '../config';
 import firebase from 'firebase';
+import MyHeader from "./MyHeader"
 
 export default class Location extends Component{
     constructor(){
@@ -21,7 +12,8 @@ export default class Location extends Component{
             longitude:"",
             lattitude:"",
             weather:"",
-            contact:"",
+            contact1:"",
+            contact2:"",
             userId:firebase.auth().currentUser.email,
         }
     }
@@ -62,60 +54,77 @@ Weather=async()=>{
       db.collection("relatives").where("senderEmail" ,"==",this.state.userId).get()
       .then(snapshot => {
         snapshot.forEach(doc => {
-        var data = doc.data()
+        var data = doc.data() 
         this.setState({
-            contact:data.contact
+            contact1:data.contact_1,
+            contact2:data.contact_2
         })
-        var msg = ""
+       
         db.collection("notifications").add({
-            msg:"Help Me,I am in Location"+this.state.weather.name,
+            msg:"Help Me,I am in Location"+"  "+this.state.weather.name,
             notificationStatus:"Unread",
             date:firebase.firestore.FieldValue.serverTimestamp(),
-            targetedUserId:data.email_id,
+            targetedUserId1:data.email_Id1,
+            targetedUserId2:data.email_Id2,
             senderId:data.senderEmail
         })
         });
       })
   }
-  makeCall = () => {
+  dialCall = (number) => { let phoneNumber = '';
 
-    let phoneNumber = '';
+   if (Platform.OS === 'android') {
 
-    if (Platform.OS === 'android') {
-      phoneNumber = 'tel:${{this.state.contact}}';
-    } else {
-      phoneNumber = 'telprompt:${{this.state.contact}}';
-    }
+      phoneNumber = `tel:${number}`; 
+    } 
+  else {
 
-    Linking.openURL(phoneNumber);
-  };
+    phoneNumber = `telprompt:${number}`;
+
+   }
+   Linking.openURL(phoneNumber); };
 render(){
     return(
-        <View style={{marginTop:100}}>
-           <Button 
-           title="Location"
-           onPress={()=>{
-               this.Weather(),
-                this.addNotification()
-            }}
-           />
-           
-           <Button
-           title="Make a Call"
-           onPress={()=>{
-               this.makeCall()
-           }}
-           />
-
-<Text>
+        <View style={{marginTop:50}}>
+          <MyHeader 
+          title="Location"
+          navigation={this.props.navigation}
+          />
+          <Text>
     {this.state.lattitude}
 </Text>
            <Text>
                {this.state.longitude}
            </Text>
+           <Button 
+           title="Get My Location"
+           onPress={()=>{
+               this.Weather(),
+                this.addNotification()
+            }}
+           />
            <Text>
                {this.state.weather.name}
            </Text>
+
+          <TouchableOpacity style={{alignItems:"center",height:30,width:200,marginTop:50,marginLeft:150,borderRadius:10,backgroundColor:"red"}}
+          onPress={()=>{
+            this.dialCall(this.state.contact1)
+        }}>
+<Text>
+  Call 1St Relative
+</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={{alignItems:"center",height:30,width:200,marginTop:50,marginLeft:150,borderRadius:10,backgroundColor:"red"}}
+          onPress={()=>{
+            this.dialCall(this.state.contact2)
+        }}>
+<Text>
+  Call 2nd Relative
+</Text>
+          </TouchableOpacity> 
+      
+           
         </View>
     )
 }

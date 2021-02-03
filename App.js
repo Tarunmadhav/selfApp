@@ -4,6 +4,7 @@ import WelcomeScreen from './screens/WelcomeScreen';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import Location from "./components/location"
 import Relatives from "./screens/RelativeDetailsScreen"
+import {AppDrawerNavigator} from "./components/AppDrawerNavigator"
 function Demo() {
   return (
     <SafeAreaView
@@ -30,6 +31,7 @@ const switchNavigator = createSwitchNavigator({
   WelcomeScreen:{screen: WelcomeScreen},
   Location : {screen:Location},
   Relatives:{screen:Relatives},
+  Drawer:{screen:AppDrawerNavigator},
 })
 
 const AppContainer =  createAppContainer(switchNavigator);

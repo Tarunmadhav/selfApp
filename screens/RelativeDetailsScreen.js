@@ -1,40 +1,40 @@
 import React,{Component}from 'react';
-import {
-    View,
-    Text,
-    TextInput,
-    Modal,
-    KeyboardAvoidingView,
-    StyleSheet,
-    TouchableOpacity,
-    Alert,
-    ScrollView,
-  Image} from 'react-native';
+import {View,Text,TextInput,Modal,KeyboardAvoidingView,StyleSheet,TouchableOpacity,Alert,ScrollView,Image} from 'react-native';
 import db from '../config';
 import firebase from 'firebase';
 import { Button } from 'react-native';
-
+import { TextComponent } from 'react-native';
+import MyHeader from "../components/MyHeader"
 
 
 export default class RlativeDetails extends Component{
   constructor(){
     super();
     this.state={
-      emailId:'',
-      Name:'',
-      address:'',
-      contact:'',
+      email_Id1:'',
+      Name_1:'',
+      address_1:'',
+      contact_1:'',
+      email_Id2:'',
+      Name_2:'',
+      address_2:'',
+      contact_2:'',
       userId:firebase.auth().currentUser.email,
     }
 }
     Relatives = () =>{
         
             db.collection('relatives').add({
-             name:this.state.Name,
-              contact:this.state.contact,
-              email_id:this.state.emailId,
-              address:this.state.address,
+             Name_1:this.state.Name_1,
+              contact_1:this.state.contact_1,
+              email_Id1:this.state.email_Id1,
+              address_1:this.state.address_1,
+              Name_2:this.state.Name_2,
+              contact_2:this.state.contact_2,
+              email_Id2:this.state.email_Id2,
+              address_2:this.state.address_2,
               senderEmail:this.state.userId
+
             })
             return  alert(
                  'Relative Added Successfully',
@@ -44,16 +44,24 @@ export default class RlativeDetails extends Component{
     render(){
         return(
             <View>
-                    <TextInput
+               <MyHeader 
+          title="Relative Details"
+          navigation={this.props.navigation}
+          />
+          <Text>
+  Enter The First Relative's Details
+        </Text>
+
+  <TextInput
                style={styles.formTextInput}
                placeholder ={"Name"}
                maxLength ={16}
                onChangeText={(text)=>{
                  this.setState({
-                   Name: text
+                   Name_1: text
                  })
                }}
-               value={this.state.name}
+               value={this.state.Name_1}
              />
                   <TextInput
                style={styles.formTextInput}
@@ -62,10 +70,10 @@ export default class RlativeDetails extends Component{
                keyboardType={'numeric'}
                onChangeText={(text)=>{
                  this.setState({
-                   contact: text
+                   contact_1: text
                  })
                }}
-               value={this.state.contact}
+               value={this.state.contact_1}
              />
              <TextInput
                style={styles.formTextInput}
@@ -73,10 +81,10 @@ export default class RlativeDetails extends Component{
                multiline = {true}
                onChangeText={(text)=>{
                  this.setState({
-                   address: text
+                   address_1: text
                  })
                }}
-               value={this.state.address}
+               value={this.state.address_1}
              /> 
              <TextInput
                style={styles.formTextInput}
@@ -84,12 +92,60 @@ export default class RlativeDetails extends Component{
                keyboardType ={'email-address'}
                onChangeText={(text)=>{
                  this.setState({
-                   emailId: text
+                   email_Id1: text
                  })
                }}
-               value={this.state.emailId}
+               value={this.state.email_Id1}
              />
-            
+            <Text>
+  Enter The Second Relative's Details
+        </Text>
+
+  <TextInput
+               style={styles.formTextInput}
+               placeholder ={"Name"}
+               maxLength ={16}
+               onChangeText={(text)=>{
+                 this.setState({
+                   Name_2: text
+                 })
+               }}
+               value={this.state.Name_2}
+             />
+                  <TextInput
+               style={styles.formTextInput}
+               placeholder ={"Contact"}
+               maxLength ={10}
+               keyboardType={'numeric'}
+               onChangeText={(text)=>{
+                 this.setState({
+                   contact_2: text
+                 })
+               }}
+               value={this.state.contact_2}
+             />
+             <TextInput
+               style={styles.formTextInput}
+               placeholder ={"Address"}
+               multiline = {true}
+               onChangeText={(text)=>{
+                 this.setState({
+                   address_2: text
+                 })
+               }}
+               value={this.state.address_2}
+             /> 
+             <TextInput
+               style={styles.formTextInput}
+               placeholder ={"Email"}
+               keyboardType ={'email-address'}
+               onChangeText={(text)=>{
+                 this.setState({
+                   email_Id2: text
+                 })
+               }}
+               value={this.state.email_Id2}
+             />
              <View style={styles.modalBackButton}>
                <TouchableOpacity
                  style={styles.registerButton}
@@ -176,7 +232,7 @@ export default class RlativeDetails extends Component{
      borderColor:'#ffab91',
      borderRadius:10,
      borderWidth:1,
-     marginTop:20,
+     marginTop:5,
      padding:10
    },
    registerButton:{
@@ -186,12 +242,13 @@ export default class RlativeDetails extends Component{
      justifyContent:'center',
      borderWidth:1,
      borderRadius:10,
-     marginTop:30,
+     marginTop:5,
      backgroundColor:"pink"
    },
    registerButtonText:{
      color : "black",
-     fontSize:15
+     fontSize:15,
+     marginTop:5
    },
    cancelButton:{
     width:200,
@@ -200,7 +257,7 @@ export default class RlativeDetails extends Component{
     justifyContent:'center',
     borderWidth:1,
     borderRadius:10,
-    marginTop:30,
+    marginTop:10,
     backgroundColor:"pink"
    },
   
